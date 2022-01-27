@@ -45,8 +45,8 @@ class TrainingData:
         entity_synonyms: Optional[Dict[Text, Text]] = None,
         regex_features: Optional[List[Dict[Text, Text]]] = None,
         lookup_tables: Optional[List[Dict[Text, Any]]] = None,
-        gazette: Optional[List[Dict[Text, List[Text]]]] = None,
         responses: Optional[Dict[Text, List[Dict[Text, Any]]]] = None,
+        gazette: Optional[List[Dict[Text, List[Text]]]] = None,
     ) -> None:
 
         if training_examples:
@@ -57,9 +57,10 @@ class TrainingData:
         self.regex_features = regex_features or []
         self.sort_regex_features()
         self.lookup_tables = lookup_tables or []
-        self.gazette = gazette if gazette else []
         self.responses = responses or {}
+        self.gazette = gazette if gazette else []
 
+        self._fill_response_phrases()
 
     def fingerprint(self) -> Text:
         """Fingerprint the training data.
@@ -108,8 +109,8 @@ class TrainingData:
         entity_synonyms = self.entity_synonyms.copy()
         regex_features = copy.deepcopy(self.regex_features)
         lookup_tables = copy.deepcopy(self.lookup_tables)
-        gazette = copy.deepcopy(self.gazette)
         responses = copy.deepcopy(self.responses)
+        gazette = copy.deepcopy(self.gazette)
 
         for o in others:
             if not o:
@@ -133,8 +134,8 @@ class TrainingData:
             entity_synonyms,
             regex_features,
             lookup_tables,
-            gazette,
             responses,
+            gazette,
         )
 
     def filter_training_examples(
